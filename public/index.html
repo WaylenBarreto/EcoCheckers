@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoCheckers | Sustainable Strategy AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <span class="eco">Eco</span>Checkers
+            </div>
+            <div class="difficulty-selector">
+                <label>Difficulty:</label>
+                <select id="difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard (Sustainable AI)</option>
+                </select>
+            </div>
+        </header>
+
+        <main>
+            <div class="game-layout">
+                <!-- Left Sidebar: Stats -->
+                <aside class="stats-panel glass">
+                    <div class="stat-group">
+                        <h3>Environmental Health</h3>
+                        <div class="meter-container">
+                            <div id="env-meter" class="meter-bar" style="width: 100%;"></div>
+                        </div>
+                        <div class="stat-value"><span id="env-score">100</span>%</div>
+                    </div>
+
+                    <div class="stat-group">
+                        <h3>Pollution Level</h3>
+                        <div class="pollution-text"><span id="pollution-value">0</span> units</div>
+                    </div>
+
+                    <div class="scores">
+                        <div class="score-card player">
+                            <span class="label">Eco Score</span>
+                            <span id="player-score" class="value">0</span>
+                        </div>
+                        <div class="score-card ai">
+                            <span class="label">AI Score</span>
+                            <span id="ai-score" class="value">0</span>
+                        </div>
+                    </div>
+
+                    <div class="zone-legend">
+                        <h4>Board Zones</h4>
+                        <ul>
+                            <li><span class="dot forest"></span> Forest: High Env Value</li>
+                            <li><span class="dot industrial"></span> Industrial: Economic Bonus</li>
+                            <li><span class="dot water"></span> Water: King Access Only</li>
+                            <li><span class="dot urban"></span> Urban: Economic Bonus</li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <!-- Center: Board -->
+                <div class="board-container">
+                    <div id="game-board" class="board"></div>
+                    <div id="turn-indicator" class="turn-indicator">Your Turn</div>
+                </div>
+
+                <!-- Right Sidebar: Log -->
+                <aside class="log-panel glass">
+                    <h3>Game Log</h3>
+                    <div id="game-log" class="log-content">
+                        <p>Welcome to EcoCheckers. Preserve the environment while conquering the board.</p>
+                    </div>
+                    <button id="reset-btn" class="primary-btn">New Game</button>
+                </aside>
+            </div>
+        </main>
+
+        <!-- Overlay for Game Over -->
+        <div id="game-over-overlay" class="overlay hidden">
+            <div class="overlay-content glass">
+                <h2 id="winner-text">Game Over</h2>
+                <p id="winner-reason"></p>
+                <button onclick="location.reload()" class="primary-btn">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
