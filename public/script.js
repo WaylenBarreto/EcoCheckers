@@ -157,6 +157,22 @@ function updateUI() {
     pollutionEl.innerText = gameState.pollution;
     turnIndicator.innerText = gameState.turn === 'player' ? "Your Turn" : "AI Turn";
 
+    // Update environmental visuals
+    if (gameState.env_score < 30) {
+        document.body.classList.add('eco-danger');
+        document.documentElement.style.setProperty('--env-glow', 'rgba(255, 77, 77, 0.2)');
+    } else {
+        document.body.classList.remove('eco-danger');
+        document.documentElement.style.setProperty('--env-glow', 'rgba(0, 255, 136, 0.1)');
+    }
+
+    // Handle new events
+    if (gameState.events && gameState.events.length > 0) {
+        gameState.events.forEach(event => {
+            addLog(`<span style="color: var(--primary-green); font-weight: bold;">${event}</span>`);
+        });
+    }
+
     if (gameState.game_over) {
         document.getElementById('game-over-overlay').classList.remove('hidden');
         document.getElementById('winner-text').innerText = gameState.winner === 'player' ? "You Won!" : "AI Won!";

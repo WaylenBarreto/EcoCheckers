@@ -107,14 +107,12 @@ class EcoCheckers:
         # Handle captures
         if move['capture']:
             cr, cc = move['capture']
-            captured_piece = self.board[cr][cc]
             self.board[cr][cc] = 0
-            self.env_score -= 5 # Capture impact
+            self.env_score -= 5
             self.pollution += 2
-            
-            # Bonus logic for capturing in forest
             if self.zones[cr][cc] == FOREST:
-                self.env_score -= 5 # Extra damage for forest capture
+                self.env_score -= 5
+                self.add_event("⚠️ Forest damage during capture!")
         
         # Zone effects
         zone = self.zones[tr][tc]
@@ -133,15 +131,10 @@ class EcoCheckers:
         if piece == 1 and tr == 0: self.board[tr][tc] = 2
         if piece == -1 and tr == 7: self.board[tr][tc] = -2
         
-        # Update scores
-        if piece > 0: self.player_score += 1
-        else: self.ai_score += 1
-        
-        # Sustainability bonus
-        if self.env_score > 80:
-            self.player_score += 2 if piece > 0 else 0
-            self.ai_score += 2 if piece < 0 else 0
-            
+        # Climate Events check (10% chance per move)
+        if random.random() < 0.15:
+            self.trigger_climate_event()
+
         # Check game over
         if self.env_score <= 0:
             self.game_over = True
@@ -150,8 +143,26 @@ class EcoCheckers:
         self.turn = 'ai' if self.turn == 'player' else 'player'
         return True
 
+    def trigger_climate_event(self):
+        events = ['Wildfire', 'Acid Rain', 'Green Recovery']
+        event = random.choice(events)
+        
+        if event == 'Wildfire':
+            self.env_score -= 10
+            self.add_event("🔥 Wildfire! Environmental health dropped.")
+        elif event == 'Acid Rain':
+            self.pollution += 5
+            self.add_event("🌧️ Acid Rain! Pollution increased.")
+        elif event == 'Green Recovery':
+            self.env_score = min(100, self.env_score + 8)
+            self.add_event("🌿 Green Recovery! Forests are healing.")
+
+    def add_event(self, msg):
+        if not hasattr(self, 'events'): self.events = []
+        self.events.append(msg)
+
     def get_state(self):
-        return {
+        state = {
             'board': self.board,
             'zones': self.zones,
             'env_score': self.env_score,
@@ -160,5 +171,8 @@ class EcoCheckers:
             'pollution': self.pollution,
             'turn': self.turn,
             'game_over': self.game_over,
-            'winner': self.winner
+            'winner': self.winner,
+            'events': getattr(self, 'events', [])
         }
+        self.events = [] # Clear events after sending
+        return state
