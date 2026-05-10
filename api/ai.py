@@ -1,5 +1,8 @@
 import copy
-from .logic import EcoCheckers, FOREST, INDUSTRIAL, URBAN
+try:
+    from .logic import EcoCheckers, FOREST, INDUSTRIAL, URBAN
+except ImportError:
+    from logic import EcoCheckers, FOREST, INDUSTRIAL, URBAN
 
 def evaluate_board(game):
     # Heuristic: Score = (Own Pieces × 5) + (Kings × 10) + (Controlled Green Zones × 3) + (Environment Score × 2) − (Pollution Generated × 4)

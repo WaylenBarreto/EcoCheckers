@@ -1,8 +1,12 @@
 from fastapi import FastAPI, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from .logic import EcoCheckers
-from .ai import get_best_move
+try:
+    from .logic import EcoCheckers
+    from .ai import get_best_move
+except ImportError:
+    from logic import EcoCheckers
+    from ai import get_best_move
 import os
 
 app = FastAPI()
@@ -71,5 +75,7 @@ async def get_moves(data: dict = Body(...)):
 async def health():
     return {"status": "ok"}
 
-# Mount static files - this should be last
-app.mount("/", StaticFiles(directory="public", html=True), name="public")
+# The static mount below is only for local dev. 
+# Vercel handles the /public folder automatically via vercel.json.
+if not os.environ.get("VERCEL"):
+    app.mount("/", StaticFiles(directory="public", html=True), name="public")
