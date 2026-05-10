@@ -44,6 +44,21 @@ document.getElementById('theme-toggle').onclick = () => {
     document.body.classList.toggle('light-mode');
 };
 
+// Tab Switching
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.onclick = () => {
+        const tab = btn.dataset.tab;
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        btn.classList.add('active');
+        document.getElementById(`${tab}-tab`).classList.add('active');
+        
+        // Play click sound
+        playSound('move');
+    };
+});
+
 const boardEl = document.getElementById('game-board');
 const envScoreEl = document.getElementById('env-score');
 const envMeterEl = document.getElementById('env-meter');

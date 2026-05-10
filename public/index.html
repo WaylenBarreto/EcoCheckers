@@ -73,12 +73,40 @@
                     <div id="turn-indicator" class="turn-indicator">Your Turn</div>
                 </div>
 
-                <!-- Right Sidebar: Log -->
+                <!-- Right Sidebar: Log & Rules -->
                 <aside class="log-panel glass">
-                    <h3>Game Log</h3>
-                    <div id="game-log" class="log-content">
-                        <p>Welcome to EcoCheckers. Preserve the environment while conquering the board.</p>
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="log">Game Log</button>
+                        <button class="tab-btn" data-tab="rules">Rules & Logic</button>
                     </div>
+
+                    <div id="log-tab" class="tab-content active">
+                        <div id="game-log" class="log-content">
+                            <p>Welcome to EcoCheckers. Preserve the environment while conquering the board.</p>
+                        </div>
+                    </div>
+
+                    <div id="rules-tab" class="tab-content">
+                        <div class="rules-container">
+                            <div class="rule-item">
+                                <h4>🌿 Sustainability</h4>
+                                <p>Capturing pieces reduces health. Moving into forests is risky. Keep the score above 0%!</p>
+                            </div>
+                            <div class="rule-item">
+                                <h4>💰 Economic Growth</h4>
+                                <p>Industrial and Urban zones give massive points but often increase pollution.</p>
+                            </div>
+                            <div class="rule-item">
+                                <h4>💧 Water Access</h4>
+                                <p>Only <b>Kings</b> can enter blue water zones. Plan your promotions carefully.</p>
+                            </div>
+                            <div class="rule-item">
+                                <h4>🤖 AI Logic</h4>
+                                <p>The AI uses <b>Minimax</b> with a custom "Eco-Heuristic" to play sustainably.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <button id="reset-btn" class="primary-btn">New Game</button>
                 </aside>
             </div>
