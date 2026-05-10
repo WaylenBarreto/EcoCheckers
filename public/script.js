@@ -2,6 +2,48 @@ let gameState = null;
 let selectedPiece = null;
 let validMoves = [];
 
+// Audio Setup
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+const ctx = new AudioCtx();
+
+function playSound(type) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    if (type === 'move') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.1);
+    } else if (type === 'capture') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(150, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.2);
+    } else if (type === 'event') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.5);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.5);
+    }
+}
+
+// Theme Toggle
+document.getElementById('theme-toggle').onclick = () => {
+    document.body.classList.toggle('light-mode');
+};
+
 const boardEl = document.getElementById('game-board');
 const envScoreEl = document.getElementById('env-score');
 const envMeterEl = document.getElementById('env-meter');
@@ -109,6 +151,11 @@ async function handleCellClick(r, c) {
 
 async function executeMove(move) {
     addLog(`Moving from ${move.from} to ${move.to}...`);
+    
+    // Sound logic
+    if (move.capture) playSound('capture');
+    else playSound('move');
+
     validMoves = [];
     selectedPiece = null;
     
@@ -141,6 +188,8 @@ async function triggerAIMove() {
 
     if (move) {
         addLog(`AI moved from ${move.from} to ${move.to}`);
+        if (move.capture) playSound('capture');
+        else playSound('move');
     } else {
         addLog("AI has no valid moves!");
     }
@@ -168,6 +217,7 @@ function updateUI() {
 
     // Handle new events
     if (gameState.events && gameState.events.length > 0) {
+        playSound('event');
         gameState.events.forEach(event => {
             addLog(`<span style="color: var(--primary-green); font-weight: bold;">${event}</span>`);
         });
