@@ -308,10 +308,45 @@ main {
     animation: piece-entry 0.5s ease-out;
 }
 
+.piece.just-moved {
+    animation: piece-glow 1s ease-in-out infinite alternate;
+    border: 2px solid white;
+    box-shadow: 0 0 15px white;
+}
+
+@keyframes piece-glow {
+    from { transform: scale(1); filter: brightness(1); }
+    to { transform: scale(1.05); filter: brightness(1.3); }
+}
+
 .cell.highlight {
     box-shadow: inset 0 0 15px var(--primary-green);
     cursor: pointer;
     animation: pulse-green 1.5s infinite;
+}
+
+.cell.last-move-source {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.cell.last-move-target {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: inset 0 0 25px white;
+}
+
+.cell.last-move-target::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    height: 80%;
+    border: 2px solid white;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 @keyframes pulse-green {

@@ -1,6 +1,7 @@
 let gameState = null;
 let selectedPiece = null;
 let validMoves = [];
+let lastMove = null;
 
 // Audio Setup
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -106,6 +107,9 @@ function renderBoard() {
                 if (selectedPiece && selectedPiece.r === r && selectedPiece.c === c) {
                     piece.classList.add('selected');
                 }
+                if (lastMove && lastMove.to[0] === r && lastMove.to[1] === c) {
+                    piece.classList.add('just-moved');
+                }
                 cell.appendChild(piece);
             }
 
@@ -113,6 +117,16 @@ function renderBoard() {
             const move = validMoves.find(m => m.to[0] === r && m.to[1] === c);
             if (move) {
                 cell.classList.add('highlight');
+            }
+
+            // Highlight last move
+            if (lastMove) {
+                if (lastMove.from[0] === r && lastMove.from[1] === c) {
+                    cell.classList.add('last-move-source');
+                }
+                if (lastMove.to[0] === r && lastMove.to[1] === c) {
+                    cell.classList.add('last-move-target');
+                }
             }
 
             cell.onclick = () => handleCellClick(r, c);
@@ -180,6 +194,7 @@ async function executeMove(move) {
         body: JSON.stringify({ ...gameState, move })
     });
     gameState = await res.json();
+    lastMove = move;
     renderBoard();
     updateUI();
 
@@ -199,6 +214,7 @@ async function triggerAIMove() {
     });
     const result = await res.json();
     gameState = result.state;
+    lastMove = result.move;
     const move = result.move;
 
     if (move) {
